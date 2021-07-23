@@ -1,0 +1,508 @@
+@import 'antd/dist/antd';
+@import './colors';
+
+:root {
+  --box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  --box-padding: 2em;
+  --section-bottom-margin: 2em;
+  --card-radius: 10px;
+
+  //Box shadows
+  //stripe: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  //material: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+
+//BODY LEVEL *********************************************
+
+body {
+  background-color: $background-color;
+}
+
+
+//LAYOUT LEVEL *********************************************
+
+.ant-layout {
+  background-color: $background-color;
+}
+
+.ant-layout-sider {
+  min-height: 100vh;
+}
+
+.custom-sidebar {
+  background-color: $primary; 
+}
+
+.custom-menu {
+  background-color: $primary !important;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 15px;
+
+  li {
+    padding: 10px 16px !important;
+  }
+
+  li:hover {
+    background-color: $hover !important;
+    border-radius: 4px !important;
+  }
+}
+
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background-color: $selected;
+  border-radius: 4px;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.3em;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #fff;
+  margin: 20px 16px;
+  border: solid 2px;
+  padding: 10px 15px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover;
+  }
+}
+
+//Put the side trigger to the top left corner
+.ant-layout-sider-zero-width-trigger {
+  top: 0px;
+}
+
+.content-wrapper {
+  padding: 2em;
+  max-width: 1200px;
+  position: relative;
+  margin: auto;
+}
+
+
+//CONTENT LEVEL *********************************************
+
+.page-title {
+  font-size: 1.5em;
+  font-weight: bolder;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 1em;
+
+  .ant-page-header {
+    padding: 0;
+  }
+}
+
+
+//Dashboard Page
+.dashboard {
+
+  h3 {
+    font-weight: bolder;
+    margin-bottom: 1em;
+  }
+
+  .ant-table-wrapper {
+    margin-bottom: 0.6em;
+  }
+
+    .ant-table-wrapper {
+    box-shadow: var(--box-shadow);
+    background-color: #fff;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+  }
+
+  .ant-table-row {
+    cursor: pointer;
+  }
+}
+
+.info-board {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: var(--section-bottom-margin);
+}
+
+.job-summary-card {
+  background-color: #fff; 
+  width: 10em;
+  height: 10em;
+  padding: 2.5em;
+  border-radius: var(--card-radius);
+  margin-right: 1em;
+  margin-bottom: 0.5em;
+  text-align: center;
+  box-shadow: var(--box-shadow);
+  box-sizing: border-box;
+
+  .ant-statistic-title {
+    color: black;
+    margin-bottom: 1em;
+    font-size: smaller;
+    font-weight: bold;
+  }
+
+  .ant-statistic-content {
+    color: black;
+    font-size: 2.5em;
+    font-weight: 600;
+  }
+}
+
+.dashboard-job-footnote {
+  text-align: center;
+}
+
+//Jobs Page
+.job-list {
+  box-shadow: var(--box-shadow);
+  background-color: #fff;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+
+  .ant-table-pagination.ant-pagination {
+    padding-right: var(--box-padding);
+  }
+
+  .ant-table-row {
+    cursor: pointer;
+  }
+}
+
+.jobs-page {
+
+  //allow shadow to show in tab
+  .ant-tabs {
+    overflow: unset;
+  }
+}
+
+//Job Details page
+.job-info {
+  background-color: #fff;
+  padding: var(--box-padding);
+  border-radius: var(--card-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--section-bottom-margin);
+
+  .ant-descriptions-item-label {
+    font-weight: 600;
+  }
+}
+
+.featured-image {
+  border: solid 1.5px #eeeaead3;
+  border-radius: 4px;
+}
+
+.job-results {
+  box-shadow: var(--box-shadow);
+  background-color: #fff;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+
+  .ant-table-pagination.ant-pagination {
+    padding-right: 2em;
+  }
+}
+
+
+//List Renderer Component
+.item-list {
+  list-style-position: inside;
+  padding-inline-start: 0;
+  width: 100%;
+  margin-bottom: 0em;
+
+  .url-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 1em;
+  }
+
+  .trigger {
+    list-style: none;
+    margin-left: 20px;
+  }
+}
+
+//Import Page
+.uploader {
+  background-color:#fff;
+  box-shadow: var(--box-shadow);
+  padding: var(--box-padding);
+  margin-bottom: var(--section-bottom-margin);
+  border-radius: var(--card-radius);
+
+  //change the color of the box icon inside the uploader
+  .ant-upload.ant-upload-drag p.ant-upload-drag-icon .anticon {
+    color: $primary;
+  }
+
+  //style the uploader box
+  .ant-upload.ant-upload-drag {
+    background-color: #fff;
+    border: 2px dashed $primary;
+
+    &:hover {
+      background-color: $background-color;
+      border-color: $hover;
+      
+      //wheeew!!! what a very complicated way of changing the icon color on hover. Might need to improve it.
+      span div p.ant-upload-drag-icon span{
+       color: $hover !important;
+      }
+    }
+  }
+}
+
+.upload-file-info {
+  margin-top: 2em;
+
+  button {
+    display: block;
+    margin-top: 1.5em;
+  }
+
+  .row-number-input {
+    margin: 1em 0;
+  }
+}
+
+.import-details {
+  background-color:#fff;
+  padding: 2em;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--card-radius);
+}
+
+.tag-input {
+  display: block;
+}
+
+.product-tag {
+  font-size: 14px;
+  height: 26px;
+  padding-top: 2px;
+  margin-top: 5px;
+  background-color: #DFE1E4;
+
+
+  span {
+    font-size: 12px;
+    font-weight: bolder;
+    margin-left: 5px;
+  }
+}
+
+.import-options {
+  .option-input {
+    margin-bottom: 1em;
+    max-width: 40em;
+  }
+
+  .last {
+    margin-bottom: 0em;
+  }
+
+}
+
+.match-field-info {
+  margin: 2.5em 0 0 0;
+  background-color: $polaris-banner-color;
+  border: solid 1.9px $polaris-banner-border-color;
+  border-radius: 0.5em;
+
+  .ant-alert-message {
+    font-weight: 500;
+  }
+}
+
+//change info icon color within alert
+.ant-alert-info .ant-alert-icon {
+  color: $polaris-info-icon-color;
+}
+
+.match-fields {
+
+  //aligning match column table to align with header
+  th:first-child, td:first-child {
+    padding-left: 0em;
+  }
+}
+
+.match-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: medium;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-bottom: solid 1.5px $greyish;
+  margin-bottom: 1.5em;
+  margin-top: 1.5em;
+}
+
+.shopify-input {
+  width: 100%;
+}
+
+.additional-input {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+}
+
+.input-title {
+  margin-bottom: 0.5em;
+  max-width: 40em;
+
+  div:nth-child(1) {
+    font-weight: 500;
+  }
+  
+  div:nth-child(2) {
+    font-size: 0.95em;
+    color: $greyish;
+    margin-top: 0.2em;
+  }
+}
+
+.import-product {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5em;
+}
+
+
+//***************************************************GENERAL STYLE CHANGES***************************************************//
+
+a {
+  color: $primary;
+
+  &:hover {
+    text-decoration: underline;
+    color: $primary
+  }
+}
+
+
+//***************************************************GENERAL ANTD STYLE CHANGES***************************************************//
+
+//Make table header backgroun white
+.ant-table-thead > tr > th {
+  background-color: #fff;
+}
+
+//clear the line seperation between table header titles
+.ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  content: none;
+}
+
+//clear the line seperation between table header titles
+.ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  content: none;
+}
+
+.ant-table-cell-ellipsis {
+  white-space: normal;
+}
+
+//primary button
+.ant-btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  color: #fff !important;
+}
+
+//primary button on fucus and hover
+.ant-btn-primary:hover, .ant-btn-primary:focus {
+  background-color: $btn-hover;
+  border-color: $btn-hover;
+  color: #fff !important;
+}
+
+//default button
+.ant-btn {
+  color: $primary;
+  border-color: $primary;
+}
+
+//default button hover and focus
+.ant-btn:hover, .ant-btn:focus {
+  color: $btn-hover;
+  border-color: $btn-hover;
+}
+
+//check box
+.ant-radio-checked .ant-radio-inner {
+  border-color: $primary; 
+}
+
+.ant-radio-inner::after {
+  background-color: $primary;
+}
+
+//input on hover and focus
+.ant-input:hover, .ant-input:focus {
+  border-color: $primary;
+}
+
+//input number on hover and focus
+.ant-input-number:hover, .ant-input-number-focused {
+  border-color: $primary;
+}
+
+//selector 
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-color: $primary;
+}
+
+.ant-select-selector:hover {
+  border-color: $primary !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: $primary;
+}
+
+.ant-tabs-ink-bar {
+  background-color: $primary;
+}
+
+.ant-pagination-item-active {
+  border-color: $primary;
+
+  a {
+    color: $primary;
+  }
+}
+
+.ant-pagination-item:hover {
+  border-color: $primary !important;
+  
+  a {
+    color: $primary !important;
+  }
+}
+
+// .ant-pagination-item-link:focus, .ant-pagination-item-link:hover {
+//   border-color: $primary !important;
+
+//   span {
+//     color: $primary !important;
+//   }
+// }
