@@ -6,8 +6,8 @@ import reducers from '../reducers/index';
 import rootSaga from '../sagas';
 import { Layout } from 'antd';
 import { BrowserRouter } from 'react-router-dom';
-import SideBar from './SideBar'
-import ContentWrapper from './ContentWrapper'
+import SideBarWrapper from './SideBarWrapper';
+import ContentWrapperContainer from './containers/ContentWrapperContainer';
 
 const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -21,10 +21,10 @@ const App = () => (
   <Provider store={store}>
     <Layout>
       <BrowserRouter>
-        <SideBar/>
+        <SideBarWrapper/>
         <Layout>
           <Content>
-            <ContentWrapper/>
+            <ContentWrapperContainer/>
           </Content>
         </Layout>
       </BrowserRouter>

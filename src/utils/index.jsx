@@ -1,9 +1,22 @@
 import React from 'react';
+import {
+  CheckCircleOutlined,
+  SyncOutlined,
+  CloseCircleOutlined,
+  ExclamationCircleOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons';
+import { Tag } from 'antd';
+import moment from 'moment';
 
 export const ShopifyFields = [
   {
-    name: 'Product Fields',
+    name: 'Select Shopify Field',
     value: null
+  },
+  {
+    name: 'Product Fields',
+    value: 'pf'
   },
   {
     name: 'Handle',
@@ -67,7 +80,7 @@ export const ShopifyFields = [
   },
   {
     name: 'Variant Fields',
-    value: null
+    value: 'vf'
   },
   {
     name: 'Variant SKU',
@@ -154,6 +167,15 @@ export const WeightUnits = [
   }
 ]
 
+export const ProductStatus = {
+  active: 'ACTIVE',
+  draft: 'DRAFT'
+}
+
+export const TaskType = {
+  create_products: 'IMPORT_CREATE'
+}
+
 export const MenuKeyToUrl = {
   DASHBOARD: '/dashboard',
   IMPORT: '/import',
@@ -169,3 +191,86 @@ export const UrlToMenuKey = {
   settings: 'SETTINGS',
   customer: 'CUSTOMER'
 }
+
+export const HttpCodes = {
+  OK: 200,
+  CREATED: 201,
+  ACCEPTED: 202,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503
+}
+
+export const JobStatus = status => {
+  let statusTag = null;
+  switch(status) {
+    case 'SUBMITTED':
+      statusTag = <Tag icon={<ClockCircleOutlined />} color="default">Submitted</Tag>;
+      break;
+    case 'PREPARING':
+      statusTag = <Tag icon={<SyncOutlined spin/>} color="cyan">Preparing</Tag>;
+      break;
+    case 'RUNNING':
+      statusTag = <Tag icon={<SyncOutlined spin/>} color="processing">Running</Tag>;
+      break;
+    case 'COMPLETED':
+      statusTag = <Tag icon={<CheckCircleOutlined />} color="success">Completed</Tag>;
+      break;
+    case 'PARTIALLY COMPLETED': 
+      statusTag = <Tag icon={<ExclamationCircleOutlined />} color="warning">Partial Complete</Tag>;
+      break;
+    case 'FAILED': 
+      statusTag = <Tag icon={<CloseCircleOutlined />} color="error">Failed</Tag>;
+      break;
+  }
+  return statusTag;
+}
+
+export const JobType = type => {
+  let jobType = '';
+  switch(type) {
+    case 'IMPORT_CREATE':
+      jobType = 'Create Products';
+      break;
+    default:
+      jobType = 'Unknown';
+  }
+  return jobType;
+}
+
+export const JobColumns = [
+  {
+    title: 'Start Time',
+    key: 'start_time',
+    render: record => {
+      if(record.status === 'SUBMITTED' || record.status === 'PREPARING') {
+        return <>Not Started</>;
+      } else {
+        return <>{moment(record.start_time).format('MMM D, YYYY h:MMa')}</>;
+      }
+    }
+  },
+  {
+    title: 'Job Type',
+    dataIndex: 'type',
+    key: 'type',
+    render: text => JobType(text)
+  },
+  {
+    title: 'Status',
+    key: 'status',
+    render: (record) => {
+      const status = record.status;
+      return JobStatus(status);
+    }
+  },
+  {
+    title: 'Success/Total',
+    key: 'total_products',
+    render: (record) => (
+      <>{ record.total_success ? record.total_success : 0 } / { record.total_products ? record.total_products : 0 }</>
+    )
+  }
+];

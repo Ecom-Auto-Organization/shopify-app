@@ -1,152 +1,70 @@
 import React from 'react';
 import styles from '../styles/main.scss';
-import InfoBoard from './InfoBoard'
-import { Table, Tag, ConfigProvider, Empty } from 'antd'
+import InfoBoard from './InfoBoard';
+import PropTypes, { object } from 'prop-types';
+import { Table, ConfigProvider, Empty, Button } from 'antd'
 import { Link, useHistory } from 'react-router-dom';
-import {
-  CheckCircleOutlined,
-  SyncOutlined,
-  CloseCircleOutlined,
-  ExclamationCircleOutlined,
-  ClockCircleOutlined,
-} from '@ant-design/icons';
+import { JobColumns } from '../utils';
 import classNames from 'classnames/bind'
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
-const Dashboard = () => {
+const propTypes = {
+  // A boolean to indicate whether user data is loading
+  isLoadingUser: PropTypes.bool.isRequired,
+  // A boolean to indicate whether jobs data is loading
+  isJobsLoading: PropTypes.bool.isRequired,
+  // the number of total jobs
+  jobCount: PropTypes.number.isRequired,
+  // the number of active jobs
+  activeJobCount: PropTypes.number.isRequired,
+  // list of recent jobs
+  recentJobs: PropTypes.arrayOf(object)
+};
+
+const Dashboard = ({
+  isLoadingUser,
+  isJobsLoading,
+  jobCount,
+  activeJobCount,
+  recentJobs
+}) => {
   const history = useHistory();
-  const jobList = [
-    {
-      startTime: 'March 2, 2021 5:00am',
-      type: 'Product Import',
-      status: 'RUNNING',
-      totalProducts: 20,
-      successful: 8,
-      jobId: '1',
-    },
-    {
-      startTime: 'March 2, 2021 5:00am',
-      type: 'Product Import',
-      status: 'SUBMITTED',
-      totalProducts: 20,
-      successful: 0,
-      jobId: '6',
-    },
-    {
-      startTime: 'March 2, 2021 5:00am',
-      type: 'Product Import',
-      status: 'COMPLETED',
-      totalProducts: 15,
-      successful: 4,
-      jobId: '2',
-    },
-    {
-      startTime: 'March 8, 2021 5:00am',
-      type: 'Product Import',
-      status: 'PREPARING',
-      totalProducts: 15,
-      successful: 0,
-      jobId: '5',
-    },
-    {
-      startTime: 'March 6, 2021 5:00am',
-      type: 'Product Import',
-      status: 'PARTIALLY COMPLETED',
-      totalProducts: 7,
-      successful: 7,
-      jobId: '3',
-    },
-    {
-      startTime: 'March 6, 2021 5:00am',
-      type: 'Product Import',
-      status: 'FAILED',
-      totalProducts: 7,
-      successful: 0,
-      jobId: '8',
-    }
-  ];
-
-  const columns = [
-    {
-      title: 'Start Time',
-      dataIndex: 'startTime',
-      key: 'startTime',
-    },
-    {
-      title: 'Job Type',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
-      title: 'Status',
-      // dataIndex: 'status',
-      key: 'status',
-      render: (record) => {
-        const status = record.status;
-        let statusTag = null;
-
-        switch(status) {
-          case 'SUBMITTED':
-            statusTag = <Tag icon={<ClockCircleOutlined />} color="default">Submitted</Tag>;
-            break;
-          case 'PREPARING':
-            statusTag = <Tag icon={<SyncOutlined spin/>} color="cyan">Preparing</Tag>;
-            break;
-          case 'RUNNING':
-            statusTag = <Tag icon={<SyncOutlined spin/>} color="processing">Running</Tag>;
-            break;
-          case 'COMPLETED':
-            statusTag = <Tag icon={<CheckCircleOutlined />} color="success">Completed</Tag>;
-            break;
-          case 'PARTIALLY COMPLETED': 
-            statusTag = <Tag icon={<ExclamationCircleOutlined />} color="warning">Partial Complete</Tag>;
-            break;
-          case 'FAILED': 
-            statusTag = <Tag icon={<CloseCircleOutlined />} color="error">Failed</Tag>;
-            break;
-        }
-
-        return (statusTag);
-      }
-    },
-    {
-      title: 'Total Products/Succeeded',
-      key: 'totalProducts',
-      render: (record) => (
-        <>{record.successful} / {record.totalProducts}</>
-      )
-    }
-  ];
 
   return (
     <div className={cx('dashboard')}>
-      <InfoBoard/>
+      <InfoBoard activeJobCount={activeJobCount} jobCount={jobCount} isLoadingUser={isLoadingUser} />
       <div>
-        <h3>Job List</h3>
+        <h3>Recent Jobs</h3>
         <ConfigProvider
           renderEmpty={
-            () => <Empty description="No Jobs Created" image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
+            () => 
+              <>
+                <Empty description="No jobs found" image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
+                <Button onClick={() => history.push('/import')} >Create Job</Button> 
+              </>
           }
         >
           <Table 
-            rowKey="jobId" 
-            columns={columns} 
-            dataSource={jobList} 
+            rowKey="id" 
+            columns={JobColumns} 
+            dataSource={recentJobs} 
             pagination={false} 
-            onRow={(record, rowIndex) => {
+            loading={isJobsLoading}
+            onRow={(record) => {
               return {
-                onClick: event => {
-                  history.push(`/jobs/${record.jobId}`);
+                onClick: () => {
+                  history.push(`/jobs/${record.id}`);
                 }
               }
             }}
           />
         </ConfigProvider>
-        {jobList.length > 0 && <div className={cx('dashboard-job-footnote')}><Link to="/jobs">view All Jobs</Link></div>}
+        {recentJobs.length > 0 && <div className={cx('dashboard-job-footnote')}><Link to="/jobs">view All Jobs</Link></div>}
       </div>
     </div>
   );
 };
 
+Dashboard.propTypes = propTypes;
 export default Dashboard;

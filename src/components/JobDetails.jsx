@@ -6,71 +6,64 @@ import {
 } from '@ant-design/icons';
 import ListRenderer from './reusable/ListRenderer';
 import defaultImage from '../images/default2.jpg';
+import PropTypes, { object } from 'prop-types'
+import { useParams } from 'react-router-dom';
+import { JobStatus, JobType } from '../utils';
+import moment from 'moment';
 import classNames from 'classnames/bind';
 import styles from '../styles/main.scss';
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
-const Dashboard = (prop) => {
+const propTypes = {
+  // A boolean to indicate whether job details is loading
+  isLoadingJobDetails: PropTypes.bool.isRequired,
+  // an action to get job details from api
+  getJobDetails: PropTypes.func.isRequired,
+  // the details of the current job in view
+  JobDetails: PropTypes.arrayOf(object).isRequired,
+  // the shop domain of the user
+  shopDomain: PropTypes.string.isRequired
+};
 
-  const jobDetail = {
-    startTime: 'March 2, 2021 5:00am',
-    type: 'Product Import',
-    status: 'COMPLETED',
-    totalProducts: 20,
-    processed: 20,
-    successful: 18,
-    duration: '5 seconds',
-    jobId: '1',
-  };
+const JobDetails = ({
+  isLoadingJobDetails,
+  jobDetails,
+  getJobDetails,
+  shopDomain
+}) => {
+  React.useEffect(() => {
+    getJobDetails(params.jobId);
+  }, [getJobDetails]);
 
-  const jobResults = [
-    {
-      resultId: 1,
-      title: 'New shoe',
-      createdAt: 'March 2, 2021 11:05 AM',
-      status: 'SUCCESS',
-      productId: '12348485',
-      featuredImage: '',
-      messages: [
-        'collection was invalid and did not create.',
-        'Invalid Collection',
-        'something was wrong with status'
-      ],
-    },
-    {
-      resultId: 2,
-      title: 'New shirt',
-      createdAt: 'March 2, 2021 11:05 AM',
-      status: 'SUCCESS',
-      productId: '12348485',
-      featuredImage: 'https://cdn.shopify.com/s/files/1/0557/4433/1961/products/product-image-1429647494.jpg?v=1621635850',
-      messages: [
-        'collection was invalid and did not create. but there are so many things that can go wrong so we are waiting'
-      ],
-    },
-    {
-      resultId: 3,
-      title: 'New pants',
-      createdAt: 'March 2, 2021 11:05 AM',
-      status: 'FAILED',
-      productId: '12348485',
-      featuredImage: '',
-      messages: [
-        'product could not create.', 
-        'collection was invalid and did not create.'
-      ],
+  const params = useParams();
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if ((jobDetails.status === 'SUBMITTED' || jobDetails.status === 'PREPARING' || jobDetails.status === 'RUNNING')) {
+        getJobDetails(params.jobId);
+      }
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [getJobDetails, jobDetails]);
+
+  const getJobMessages = (errors, warnings) => {
+    let messages = [];
+    if (errors) {
+      messages.concat(errors);
     }
-  ]
+    if (warnings) {
+      messages.concat(warnings);
+    }
+    return messages;
+  }
 
   const columns = [
     {
       title: '',
-      dataIndex: 'featuredImage',
-      key: 'featuredImage',
+      dataIndex: 'featured_image',
       width: 150,
-      render: text => (
-      <Image 
+      render: (text, record) => (
+      <a href={'https://' + shopDomain + '/admin/products/' + record.product_id} target="_blank"><Image 
         src={text} 
         height={50} 
         width={50} 
@@ -78,13 +71,15 @@ const Dashboard = (prop) => {
         fallback={defaultImage}
         alt="Featured Image"
         className={cx('featured-image')}
-      />
+      /></a>
       )
     },
     {
       title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
+      dataIndex: 'product_title',
+      render: (text, record) => (
+        <a href={'https://' + shopDomain + '/admin/products/' + record.product_id} target="_blank">{text}</a>
+      )
     },
     {
       title: 'Status',
@@ -108,12 +103,36 @@ const Dashboard = (prop) => {
     {
       title: 'Job Messages',
       key: 'messages',
-      render: (record) => <ListRenderer items={record.messages} />
+      render: (record) => <ListRenderer items={getJobMessages(record?.errors, record?.warnings)} />
     },
   ];
 
-  let resultContent = jobResults ? (
-    <Table rowKey="resultId" columns={columns} dataSource={jobResults} />
+  const formatStartTime = (startTime, status) => {
+    if(status === 'SUBMITTED' || status === 'PREPARING') {
+      return 'Not Started';
+    } else {
+      return moment(startTime).format('MMM D, YYYY h:MMa');
+    }
+  }
+
+  const getProgress = () => {
+    if(jobDetails.total_products && jobDetails.total_products > 0) {
+      return ((jobDetails.total_success ? jobDetails.total_success : 0) + (jobDetails.total_failed ? jobDetails.total_failed : 0)) / jobDetails.total_products * 100; 
+    } else {
+      return 0;
+    }
+  }
+
+  const getSuccess = () => {
+    if(jobDetails.total_products && jobDetails.total_products > 0) {
+      return (jobDetails.total_success ? jobDetails.total_success : 0) / jobDetails.total_products * 100; 
+    } else {
+      return 0;
+    }
+  }
+
+  let resultContent = (jobDetails.results && jobDetails.results.length > 0)? (
+    <Table rowKey="id" columns={columns} dataSource={jobDetails?.results} loading={isLoadingJobDetails} />
   ): null;
 
   return (
@@ -123,23 +142,24 @@ const Dashboard = (prop) => {
           <Descriptions.Item span={2} >
             <h5>Progress Bar</h5>
             <Progress 
-              percent={jobDetail.processed / jobDetail.totalProducts * 100} 
+              percent={ getSuccess() } 
               strokeWidth={4} 
             />
           </Descriptions.Item>
-          <Descriptions.Item label="Start Time">{jobDetail.startTime}</Descriptions.Item>
-          <Descriptions.Item label="Duration">{(jobDetail.duration && jobDetail?.duration.trim() !== '') ? jobDetail.duration : '--'}</Descriptions.Item>
-          <Descriptions.Item label="Job Type">{jobDetail.type}</Descriptions.Item>
-          <Descriptions.Item label="Status">{<Tag icon={<CheckCircleOutlined />} color="success">Completed</Tag>}</Descriptions.Item>
-          <Descriptions.Item label="Total Products">{jobDetail.totalProducts}</Descriptions.Item>
-          <Descriptions.Item label="Successful">{jobDetail.successful}</Descriptions.Item>
+          <Descriptions.Item label="Start Time">{formatStartTime(jobDetails.start_time, jobDetails.status)}</Descriptions.Item>
+          <Descriptions.Item label="Duration">{jobDetails.duration ? jobDetails.duration : '--'}</Descriptions.Item>
+          <Descriptions.Item label="Job Type">{JobType(jobDetails.type)}</Descriptions.Item>
+          <Descriptions.Item label="Status">{JobStatus(jobDetails.status)}</Descriptions.Item>
+          <Descriptions.Item label="Total Products">{ jobDetails.total_products ? jobDetails.total_products : 0 }</Descriptions.Item>
+          <Descriptions.Item label="Success/Failed">{ jobDetails.total_success ? jobDetails.total_success : 0 } / { jobDetails.total_failed ? jobDetails.total_failed : 0 }</Descriptions.Item>
         </Descriptions>
       </div>
       <div className={cx('job-results')}>
-        {resultContent}
+        {  resultContent }
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+JobDetails.proptypes = propTypes;
+export default JobDetails;

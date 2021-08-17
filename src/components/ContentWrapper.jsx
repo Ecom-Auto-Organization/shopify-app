@@ -1,22 +1,49 @@
 import React from 'react';
 import styles from '../styles/main.scss';
 import PageTitle from './reusable/PageTitle';
-import Dashboard from './Dashboard';
-import JobsPage from './JobsPage';
-import ProductImportPage from './ProductImportPage'
-import JobDetails from './JobDetails'
-import { Result, Button } from 'antd';
+import DashboardContainer from './containers/DashboardContainer';
+import JobsPageContainer from './containers/JobsPageContainer';
+import ProductImportPageContainer from './containers/ProductImportPageContainer';
+import JobDetailsContainer from './containers/JobDetailsContainer';
+import AuthenticateContainer from './containers/AuthenticateContainer';
+import PropTypes from 'prop-types';
+import { Result, Button, Alert } from 'antd';
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { clearLoadJobDetailsFailedFlag } from '../actions';
 
 const cx = classNames.bind(styles)
 
-const ContentWrapper = () => {
+const propTypes = {
+  // A boolean to indicate if an error occured whiles retrieving user data
+  isLoadUserFailed: PropTypes.bool.isRequired,
+  // A boolean to indicate if an error occured whiles retrieving jobs list
+  isLoadJobsFailed: PropTypes.bool.isRequired,
+  // function to clear failed jobs flags
+  clearLoadJobsFailedFlag: PropTypes.func.isRequired,
+  // function to clear failed user flags
+  clearLoadUserFailedFlag: PropTypes.func.isRequired,
+  // function to clear failed job details flag
+  clearLoadJobDetailsFailedFlag: PropTypes.func.isRequired,
+  // a boolean indicating weather job details api failed
+  isJobDetailsFailed: PropTypes.bool.isRequired
+};
+
+const ContentWrapper = ({
+  isLoadJobsFailed,
+  isLoadUserFailed,
+  clearLoadJobsFailedFlag,
+  clearLoadUserFailedFlag,
+  isJobDetailsFailed,
+  clearLoadJobDetailsFailedFlag
+}) => {
   const history = useHistory();
 
   const goHome = () => {
     history.push('/dashboard');
   }
+
+
   return (
     <div className={cx('content-wrapper')}>
       <Switch>
@@ -33,22 +60,52 @@ const ContentWrapper = () => {
           <PageTitle title="Dashboard" />
         </Route>
       </Switch>
+      {
+        isLoadUserFailed && 
+        <Alert 
+          message="We are having an issue retrieving your information. Please try reloading the page."
+          closable={true}
+          showIcon={true}
+          type="error"
+          onClose={clearLoadUserFailedFlag}
+        />
+      }
+      {
+        isLoadJobsFailed && 
+        <Alert 
+          message="We are having an issue retrieving your created jobs. Please try reloading the page."
+          closable={true}
+          showIcon={true}
+          type="error"
+          onClose={clearLoadJobsFailedFlag}
+        />
+      }
+      {
+        isJobDetailsFailed && 
+        <Alert 
+          message="We are having an issue retrieving the job details."
+          closable={true}
+          showIcon={true}
+          type="error"
+          onClose={clearLoadJobDetailsFailedFlag}
+        />
+      }
       <Switch>
-        <Route exact path="/jobs/:id">
-          <JobDetails />
+        <Route exact path="/jobs/:jobId">
+          <JobDetailsContainer />
         </Route>
         <Route exact path="/jobs">
-          <JobsPage />
+          <JobsPageContainer />
         </Route>
         <Route exact path="/import">
-          <ProductImportPage />
+          <ProductImportPageContainer />
         </Route>
         <Route exact path="/dashboard">
-          <Dashboard />
+          <DashboardContainer />
         </Route>
         <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
         <Route exact path="/auth/:userId">
-          <div>Loading</div>
+          <AuthenticateContainer />
         </Route>
         <Route path="*">
           <Result 
