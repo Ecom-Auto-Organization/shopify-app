@@ -78,11 +78,11 @@ const ShopifyFieldInput = ({
   );
 
   let additionalInput = null;
-  if (field === 'option1Value' || field == 'option2Value' || field == 'option3Value') {
+  if (column?.field === 'option1Value' || column?.field == 'option2Value' || column?.field == 'option3Value') {
     additionalInput = defaultOptionNameInput;
-  } else if (field === 'variantWeight') {
+  } else if (column?.field === 'variantWeight') {
     additionalInput = variantWeightUnitInput;
-  } else if (field === 'variantQuantity') {
+  } else if (column?.field === 'variantQuantity') {
     additionalInput = (locations.length > 1) ? locationInput : null;
   }
 

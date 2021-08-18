@@ -32,6 +32,8 @@ const propTypes = {
   handleProductImport: PropTypes.func.isRequired,
   // a boolean indicating that product import is in progress
   isImportingProduct: PropTypes.bool.isRequired,
+  // function to auto detect shopify fields from file columns
+  handleAutoDetect: PropTypes.func.isRequired,
 };
 
 const ImportDetailForm = ({
@@ -41,7 +43,8 @@ const ImportDetailForm = ({
   handleColumnConfigChange,
   columnConfig,
   handleProductImport,
-  isImportingProduct
+  isImportingProduct,
+  handleAutoDetect
 }) => {
   const [tags, setTags] = React.useState([]);
   const [tagInput, setTagInput] = React.useState('');
@@ -54,7 +57,6 @@ const ImportDetailForm = ({
       scrollRef.current.scrollIntoView({ behavior: "auto", block: "start" });
     }
   }, [isFileUploadSucceeded])
-
   const columns = [
     {
       title: 'Spreadsheet Column',
@@ -107,7 +109,7 @@ const ImportDetailForm = ({
   }
 
   const autoDetect = () => {
-    console.log("auto detect");
+    handleAutoDetect();
   }
   const handleClose = (removedTag) => {
     const tempTags = tags.filter(tag => tag !== removedTag);

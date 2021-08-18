@@ -3,7 +3,7 @@ import PropTypes, { object } from 'prop-types'
 import { message } from 'antd'
 import FileUploader from './FileUploader'
 import ImportDetailForm from './ImportDetailForm';
-import { TaskType } from '../utils';
+import { TaskType, AutoDetectField } from '../utils';
 import { Redirect } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from '../styles/main.scss';
@@ -101,13 +101,7 @@ const ProductImportPage = ({
       const fileId = uploadDetails.fileId;
       const fields = [ ...columnConfig ];
       importProduct(taskType, fileId, options, fields);
-      // console.log(uploadDetails.columnDetails)
-      // console.log(Array.isArray(uploadDetails.columnDetails));
-      // console.log(fields)
-      // console.log(Array.isArray(fields));
     }
-    // console.log(taskType),
-    // console.log(fileId)
   }
 
   const handleColumnConfigChange = (index, columnValue, isAdditionalFieldInfo) => {
@@ -127,6 +121,15 @@ const ProductImportPage = ({
     setColumnFieldSet(tempFieldSet)
     setColumnConfig(tempConfig);
   }
+
+  const handleAutoDetect = () => {
+    const tempConfig = [ ...columnConfig ];
+    const autoDectResults = AutoDetectField(tempConfig, locations[0]?.id);
+    setColumnConfig(autoDectResults.columns);
+    setColumnFieldSet(autoDectResults.fieldSet);
+    message.success('Auto Dectect Successful. Please ensure fields were matched correctly', 10);
+  }
+
   return (
     <div>
       <FileUploader handleUpload={handleUpload} isFileUploading={isFileUploading} isFileUploadSucceeded={isFileUploadSucceeded} />
@@ -139,6 +142,7 @@ const ProductImportPage = ({
         columnConfig={columnConfig} 
         handleProductImport={handleProductImport}
         isImportingProduct={isImportingProduct}
+        handleAutoDetect={handleAutoDetect}
       />}
     </div>
   );
