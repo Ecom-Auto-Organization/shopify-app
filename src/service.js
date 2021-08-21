@@ -1,12 +1,24 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+const prodEndpoint = {
+  auth: 'https://auth.ecompal.io',
+  pm: 'https://api.ecompal.io'
+};
+
+const devEndpoint = {
+  auth: 'https://iiz52mz2le.execute-api.us-east-2.amazonaws.com/dev',
+  pm: 'https://8p5lt3lu1b.execute-api.us-east-2.amazonaws.com/dev'
+};
+
+const endPoint = { ...prodEndpoint };
+
 const authInstance = axios.create({
-  baseURL: 'https://iiz52mz2le.execute-api.us-east-2.amazonaws.com/dev'
+  baseURL: endPoint.auth
 })
 
 const pmInstance = axios.create({
-  baseURL: 'https://8p5lt3lu1b.execute-api.us-east-2.amazonaws.com/dev'
+  baseURL: endPoint.pm
 })
 
 pmInstance.interceptors.request.use(

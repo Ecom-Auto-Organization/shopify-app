@@ -107,8 +107,8 @@ const SideBar = ({
         <Menu.Item key={UrlToMenuKey.dashboard} icon={<LaptopOutlined />}>Dashboard</Menu.Item>
         <Menu.Item key={UrlToMenuKey.import} icon={<DownloadOutlined />}>Product Import</Menu.Item>
         <Menu.Item key={UrlToMenuKey.jobs} icon={<SnippetsOutlined />}>Job List</Menu.Item>
-        <Menu.Item key={UrlToMenuKey.settings} icon={<SettingOutlined />}>Settings</Menu.Item>
-        <Menu.Item key={UrlToMenuKey.customer} icon={<QuestionCircleFilled />}>Help Center</Menu.Item>
+        {/* <Menu.Item key={UrlToMenuKey.settings} icon={<SettingOutlined />}>Settings</Menu.Item>
+        <Menu.Item key={UrlToMenuKey.customer} icon={<QuestionCircleFilled />}>Help Center</Menu.Item> */}
       </Menu>
       <ReloadModal visible={tokenExpired} />
     </Sider>
