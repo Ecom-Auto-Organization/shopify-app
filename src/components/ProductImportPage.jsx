@@ -32,7 +32,9 @@ const propTypes = {
   // id for the new job created by the product import
   newJobId: PropTypes.string.isRequired,
   // function to create a job to import product
-  importProduct: PropTypes.func.isRequired
+  importProduct: PropTypes.func.isRequired,
+  // function to clear upload file success flag
+  clearUploadFileSuccessFlag: PropTypes.func.isRequired
 };
 
 const ProductImportPage = ({
@@ -46,7 +48,8 @@ const ProductImportPage = ({
   isProductImportSucceeded,
   isProductImportFailed,
   newJobId,
-  importProduct
+  importProduct,
+  clearUploadFileSuccessFlag
 }) => {
   const [columnFieldSet, setColumnFieldSet] = React.useState(new Set());
   const [columnConfig, setColumnConfig] = React.useState([]);
@@ -77,6 +80,7 @@ const ProductImportPage = ({
     } else if (isProductImportSucceeded) {
       message.success('Product import job created successfully.', 3);
       resetUploadDetails();
+      clearUploadFileSuccessFlag();
     }
   }, [isProductImportFailed, isProductImportSucceeded])
 
@@ -95,7 +99,13 @@ const ProductImportPage = ({
 
   const handleProductImport = (options) => {
     if (!columnFieldSet.has('title')) {
-      message.error('Title field is required. Please match the title field.', 7);
+      message.error('Title field is required. Please match the title field.', 10);
+    } else if (columnFieldSet.has('option1Name') && !columnFieldSet.has('option1Value')) {
+      message.error('Option 1 Name was set, but with no matching Option 1 value.', 10);
+    } else if (columnFieldSet.has('option2Name') && !columnFieldSet.has('option2Value')) {
+      message.error('Option 2 Name was set, but with no matching Option 2 value.', 10);
+    } else if (columnFieldSet.has('option3Name') && !columnFieldSet.has('option3Value')) {
+      message.error('Option 3 Name was set, but with no matching Option 3 value.', 10);
     } else {
       const taskType = TaskType.create_products;
       const fileId = uploadDetails.fileId;

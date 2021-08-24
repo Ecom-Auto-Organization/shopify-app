@@ -19,6 +19,7 @@ import {
   GET_JOB_DETAILS_FAILED, 
   CLEAR_LOAD_JOB_DETAILS_FAILED_FLAG,
   CLEAR_PRODUCT_IMPORT_SUCCESS_FLAG,
+  CLEAR_UPLOAD_FILE_SUCCESS_FLAG,
   IMPORT_PRODUCT,
   IMPORT_PRODUCT_SUCCEEDED,
   IMPORT_PRODUCT_FAILED
@@ -165,6 +166,11 @@ const appStateReducer = (state = {
         return {
           ...state,
           isProductImportSucceeded: false
+        }
+      case CLEAR_UPLOAD_FILE_SUCCESS_FLAG:
+        return {
+          ...state,
+          isFileUploadSucceeded: false
         }
       case IMPORT_PRODUCT:
         return {

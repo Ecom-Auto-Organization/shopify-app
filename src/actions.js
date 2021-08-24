@@ -19,6 +19,7 @@ export const GET_JOB_DETAILS_SUCCEEDED = 'GET_JOB_DETAILS_SUCCEEDED';
 export const GET_JOB_DETAILS_FAILED = 'GET_JOB_DETAILS_FAILED';
 export const CLEAR_LOAD_JOB_DETAILS_FAILED_FLAG = 'CLEAR_LOAD_JOB_DETAILS_FAILED_FLAG';
 export const CLEAR_PRODUCT_IMPORT_SUCCESS_FLAG = 'CLEAR_PRODUCT_IMPORT_SUCCESS_FLAG';
+export const CLEAR_UPLOAD_FILE_SUCCESS_FLAG = 'CLEAR_UPLOAD_FILE_SUCCESS_FLAG';
 export const REFRESH_USER_DATA = 'REFRESH_USER_DATA';
 export const IMPORT_PRODUCT = 'IMPORT_PRODUCT'
 export const IMPORT_PRODUCT_SUCCEEDED = 'IMPORT_PRODUCT_SUCCEEDED'
@@ -67,6 +68,11 @@ export function clearProductImportSuccessFlag() {
   };
 }
 
+export function clearUploadFileSuccessFlag() {
+  return {
+    type: CLEAR_UPLOAD_FILE_SUCCESS_FLAG
+  };
+}
 
 export function uploadFile(formData) {
   return {

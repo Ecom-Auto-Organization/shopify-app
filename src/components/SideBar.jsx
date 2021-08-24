@@ -74,6 +74,7 @@ const SideBar = ({
         }
       } else if (isProductImportSucceeded) {
         refreshUserData();
+        clearProductImportSuccessFlag();
       }
     }, 9000);
     return () => clearInterval(interval);

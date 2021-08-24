@@ -1,4 +1,4 @@
-import { LOAD_JOBS_SUCCEEDED } from "../actions";
+import { LOAD_JOBS_SUCCEEDED, LOAD_JOBS_FAILED } from "../actions";
 
 const jobsReducer = (state = { allJobs: [], recentJobs: [] }, action) => {
   switch(action.type) {
@@ -7,6 +7,12 @@ const jobsReducer = (state = { allJobs: [], recentJobs: [] }, action) => {
         ...state,
         allJobs: action.jobs,
         recentJobs: action.jobs.slice(0, 10),
+      }
+    case LOAD_JOBS_FAILED:
+      return {
+        ...state,
+        allJobs: [],
+        recentJobs: []
       }
     default:
       return state

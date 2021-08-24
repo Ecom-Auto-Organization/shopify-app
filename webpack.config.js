@@ -2,13 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
     entry: './src/index.jsx',
-    output: {
-        path: path.join(__dirname, '/build'),
-        filename: 'bundle.js',
-        publicPath: '/'
-    },
     module: {
         rules: [
             {
@@ -20,14 +14,6 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
-            },
-            {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
-            },
-            {
-                test: /\.css$/i,
-                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif|eps)$/i,
@@ -43,11 +29,5 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'template', 'index.html'),
         })
-    ],
-    devServer: {
-        contentBase: path.resolve(__dirname, 'build'),
-        historyApiFallback: true,
-        hot: true,
-        port: 3000
-    }
+    ]
 }

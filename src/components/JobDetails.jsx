@@ -103,14 +103,17 @@ const JobDetails = ({
     {
       title: 'Job Messages',
       key: 'messages',
-      render: (record) => <ListRenderer items={getJobMessages(record?.errors, record?.warnings)} />
+      render: (record) => <ListRenderer items={record?.messages ? record.messages : []} />
     },
   ];
 
   const formatStartTime = (startTime, status) => {
-    if(status === 'SUBMITTED' || status === 'PREPARING') {
+    if (status === undefined || status === null) {
+      return '--';
+    } else if(status === 'SUBMITTED' || status === 'PREPARING') {
       return 'Not Started';
-    } else {
+    } 
+    else {
       return moment(startTime).format('MMM D, YYYY h:MMa');
     }
   }

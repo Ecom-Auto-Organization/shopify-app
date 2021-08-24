@@ -4,7 +4,8 @@
   "description": "A Shopify application to help merchants bulk manage their products",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --mode development"
+    "start": "webpack serve --mode development --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "@ant-design/icons": "^4.6.2",
     "antd": "^4.16.3",
     "axios": "^0.21.1",
+    "axios-auth-refresh": "^3.1.0",
     "classnames": "^2.3.1",
     "js-cookie": "^2.2.1",
     "moment": "^2.29.1",
@@ -30,6 +32,7 @@
     "@babel/preset-react": "^7.12.13",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "css-loader": "^5.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
@@ -39,11 +42,13 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
     "jest": "^27.0.4",
+    "mini-css-extract-plugin": "^2.2.0",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.1.0",
     "style-loader": "^2.0.0",
     "webpack": "^5.27.0",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.8.0"
   }
 }

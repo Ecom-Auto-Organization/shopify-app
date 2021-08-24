@@ -1,5 +1,10 @@
 import { connect } from "react-redux";
-import { uploadFile, resetUploadDetails, importProduct } from "../../actions";
+import { 
+  uploadFile, 
+  resetUploadDetails, 
+  importProduct, 
+  clearUploadFileSuccessFlag 
+} from "../../actions";
 import ProductImportPage from "../ProductImportPage";
 
 const mapStateToProps = ({
@@ -27,7 +32,8 @@ const mapStateToProps = ({
 const mapDispatchToProps = {
   uploadFile,
   resetUploadDetails,
-  importProduct
+  importProduct,
+  clearUploadFileSuccessFlag
 };
 
 export default connect(

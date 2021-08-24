@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+let isRefreshing = false;
 const prodEndpoint = {
   auth: 'https://auth.ecompal.io',
   pm: 'https://api.ecompal.io'
@@ -32,6 +33,42 @@ pmInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+const getNewAccessToken = async () => {
+  const refreshToken = Cookies.get('rfsh');
+  const refresh = (refreshToken != null && refreshToken != undefined) ? refreshToken : 'refresh';
+
+  try {
+    const response = await authInstance.post('/auth/refresh', {}, { headers: { 'Authorization': `bearer ${refresh}` } });
+    return response.data.accessToken;
+  } catch (error) {
+    return null;
+  }
+}
+
+pmInstance.interceptors.response.use(
+  response => response,
+  async error => {
+    const status = error?.response.status ? error.response.status : null;
+    const originalRequest = error.config;
+    
+    if (status === 401 || status === 403) {
+      if (!isRefreshing) {
+        const accessToken = await getNewAccessToken();
+        if (accessToken !== null) {
+          originalRequest.headers.Authorization = `bearer ${accessToken}`;
+          const thirtyMin = 1/48;
+          Cookies.set('tkn', accessToken, {expires: thirtyMin});
+          return pmInstance(originalRequest);
+        } else {
+          return Promise.reject(error);
+        }
+      }
+    } else {
+      return Promise.reject(error);
+    }
+  }
+)
 
 const ProductManagerAPI = () => ({
   
