@@ -60,11 +60,11 @@ const JobDetails = ({
   const columns = [
     {
       title: '',
-      dataIndex: 'featured_image',
+      key: 'featured_image',
       width: 150,
       render: (text, record) => (
       <a href={'https://' + shopDomain + '/admin/products/' + record.product_id} target="_blank"><Image 
-        src={text} 
+        src={record.featured_image ? record.featured_image : ''} 
         height={50} 
         width={50} 
         preview={false}
@@ -114,7 +114,7 @@ const JobDetails = ({
       return 'Not Started';
     } 
     else {
-      return moment(startTime).format('MMM D, YYYY h:MMa');
+      return moment(startTime).format('MMM D, YYYY h:mma');
     }
   }
 

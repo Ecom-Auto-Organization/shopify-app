@@ -248,7 +248,7 @@ export const JobColumns = [
       if(record.status === 'SUBMITTED' || record.status === 'PREPARING') {
         return <>Not Started</>;
       } else {
-        return <>{moment(record.start_time).format('MMM D, YYYY h:MMa')}</>;
+        return <>{moment(record.start_time).format('MMM D, YYYY h:mma')}</>;
       }
     }
   },
